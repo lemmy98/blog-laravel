@@ -19,7 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('body');
             $table->string('status', 50)->default('approved');
             $table->timestamp('published_at');
-            $table->timestamps();
+            $table->timestamps();// gives created_at and updated_at automatically
         });
     }
 

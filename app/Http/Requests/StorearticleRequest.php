@@ -13,7 +13,7 @@ class StorearticleRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,16 @@ class StorearticleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "title" => "required|unique:articles,title",
+            "body" => "required",
+            "published_at" => "required",
         ];
+    }
+
+    public function messages()
+    {
+       return [
+           "title.unique" => "There is an article with the same title, please provide another title"
+       ];
     }
 }

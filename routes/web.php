@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return 'welcome to class larasoft';
 });
+
+Route::any('testLogin', function(){
+    return 'test Login';
+})->name('login');
