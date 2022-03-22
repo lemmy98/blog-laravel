@@ -26,14 +26,15 @@ class StorearticleRequest extends FormRequest
         return [
             "title" => "required|unique:articles,title",
             "body" => "required",
-            "published_at" => "required",
+            "published_at" => "required|date"
         ];
     }
 
     public function messages()
     {
        return [
-           "title.unique" => "There is an article with the same title, please provide another title"
+           "title.unique" => "There is an article with the same title, please provide another title",
+           "title.required" => "A title is required to create an article"
        ];
     }
 }

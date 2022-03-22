@@ -27,14 +27,13 @@ class ArticleController extends Controller
     {
         try {
             $data = $request->validated();
+            $data["user_id"] = 1;
             $article = article::create($data);
             return response()->json($article);
         }catch (\Exception $exception){
-            return response()->json("An error occured", 400);
+            logger($exception);
+            return response()->json("An error occurred", 400);
         };
-
-
-
     }
 
     public function show($id)
