@@ -18,6 +18,10 @@ class article extends Model
         "published_at",
         "user_id",
     ];
+    /**
+     * @var mixed
+     */
+    private $title;
 
     public function user(){
         return $this->belongsTo(User::class);

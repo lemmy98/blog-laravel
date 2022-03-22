@@ -31,6 +31,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'updated_at',
+        'created_at'
     ];
 
     /**
@@ -41,8 +43,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * @var mixed
+     */
+    private $name;
 
     public function articles(){
-        return $this->hasMany(article::class);
+        return $this->hasMany(article::class)
+            ->orderBy("id","desc");
     }
 }

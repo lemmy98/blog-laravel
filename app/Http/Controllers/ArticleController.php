@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorearticleRequest;
 use App\Models\article;
+use App\Notifications\ArticleCreatedNotification;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -12,12 +13,16 @@ class ArticleController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $articles = article::all();
+            $user = $request->user();
+
+            //$articles = article::all(); //get all articles from articles
+            $articles = $user -> articles;
             return response()->json($articles);
         }catch(\Exception $exception) {
+            logger($exception);
             return response()->json("An error occured", 400);
         }
 
@@ -27,8 +32,12 @@ class ArticleController extends Controller
     {
         try {
             $data = $request->validated();
-            $data["user_id"] = 1;
+            $user = $request->user();
+            $data["user_id"] = $user->id; //ets logged user id
             $article = article::create($data);
+            if($article) {
+                $user->notify(new ArticleCreatedNotification($user, $article));
+            }
             return response()->json($article);
         }catch (\Exception $exception){
             logger($exception);
@@ -45,6 +54,7 @@ class ArticleController extends Controller
             }
             return response()->json($article);
         }catch (\Exception $exception){
+            logger($exception);
             return response()->json("An error occured", 400);
         };
     }
@@ -66,6 +76,7 @@ class ArticleController extends Controller
             $article->update($data);
             return response()->json($article);
         }catch (\Exception $exception){
+            logger($exception);
             return response()->json("An error occured", 400);
         };
     }
@@ -80,6 +91,7 @@ class ArticleController extends Controller
             $article->delete();
             return response()->json("article deleted");
         }catch (\Exception $exception){
+            logger($exception);
             return response()->json("An error occured", 400);
         };
     }
